@@ -1,30 +1,30 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Este archivo brinda orientación a Claude Code (claude.ai/code) al trabajar con el código de este repositorio.
 
-## Repository overview
+## Descripción general del repositorio
 
-This repo is a single static landing page for **ModLab Mérida**, a local PS4 software-modding/repair business in Mérida, Yucatán, Mexico. It is deployed via GitHub Pages (canonical URL `https://demoniodeb.github.io/PS-JailBreak/`). There is no backend, no build system, and no package manager — the entire site is one self-contained HTML file plus a handful of static images.
+Este repo es una landing page estática de una sola página para **ModLab Mérida**, un negocio local de modificación/reparación de PS4 por software en Mérida, Yucatán, México. Se despliega mediante GitHub Pages (URL canónica `https://demoniodeb.github.io/PS-JailBreak/`). No hay backend, ni sistema de build, ni gestor de paquetes — todo el sitio es un único archivo HTML autocontenido más un puñado de imágenes estáticas.
 
-## Repository structure
+## Estructura del repositorio
 
-- `index.html` — the entire site: markup, `<style>` CSS, structured data (JSON-LD), and vanilla JS, all inline in one file.
-- `assets/` — favicons and touch icons (`favicon-16.png`, `favicon-32.png`, `favicon-48.png`, `apple-touch-icon.png`). Note: `index.html` references `assets/og-image.jpg` for Open Graph/Twitter card previews, but that file does not currently exist in `assets/`.
+- `index.html` — el sitio completo: markup, CSS en `<style>`, datos estructurados (JSON-LD) y JS vanilla, todo inline en un solo archivo.
+- `assets/` — favicons e iconos táctiles (`favicon-16.png`, `favicon-32.png`, `favicon-48.png`, `apple-touch-icon.png`). Nota: `index.html` referencia `assets/og-image.jpg` para las previsualizaciones de Open Graph/Twitter card, pero ese archivo actualmente no existe en `assets/`.
 
-## Development workflow
+## Flujo de trabajo de desarrollo
 
-There is no build, lint, test, or package-install step — this is plain HTML/CSS/JS with no dependencies.
+No hay paso de build, lint, tests ni instalación de paquetes — es HTML/CSS/JS plano sin dependencias.
 
-- **Preview locally**: open `index.html` directly in a browser, or serve the directory (e.g. `python3 -m http.server`) from the repo root so relative asset paths resolve correctly.
-- **Deploy**: pushing to the branch that GitHub Pages is configured to serve (check repo Settings → Pages) publishes the site automatically; there is no separate build/deploy step to run.
-- When editing, verify changes by opening the file in a browser rather than relying on any test suite — none exists.
+- **Previsualizar en local**: abre `index.html` directamente en el navegador, o sirve el directorio (p. ej. `python3 -m http.server`) desde la raíz del repo para que las rutas relativas de los assets resuelvan correctamente.
+- **Despliegue**: al hacer push a la rama que GitHub Pages tenga configurada para servir (revisa Settings → Pages del repo) el sitio se publica automáticamente; no hay un paso de build/deploy separado que ejecutar.
+- Al editar, verifica los cambios abriendo el archivo en el navegador en lugar de depender de una suite de tests — no existe ninguna.
 
-## Content & structure conventions
+## Convenciones de contenido y estructura
 
-- **Single-file architecture**: All CSS lives in the `<style>` block in `<head>`; all JS lives in a `<script>` block at the end of `<body>`. Keep new styles/scripts inline in `index.html` rather than splitting into separate files, consistent with the current structure.
-- **Site language is Spanish** (`<html lang="es">`) and targets a Mexican audience (`es_MX` locale, MXN currency). Keep all user-facing copy in Spanish unless told otherwise.
-- **Section-based layout**: the page is a sequence of `<section>` blocks with descriptive `id`s (`beneficios`, `paquetes`, `ubicacion`, `garantia`, `faq`, `contacto`) used both for the nav/anchor links and as natural editing boundaries — most content edits target one section.
-- **CSS variables**: colors, spacing, and radii are centralized in `:root` custom properties (`--bg`, `--cyan`, `--green-wa`, `--text`, etc. at the top of the `<style>` block). Reuse these variables instead of hardcoding new colors.
-- **Pricing/package selectors**: the "Con Disco Interno" and "Interno + Externo" package cards have interactive capacity pills (`.pill` buttons with `data-price`/`data-label` attributes) wired up by two near-identical IIFEs at the bottom of the script. Each IIFE updates the displayed price (via `fmt()`), the descriptive note, and the WhatsApp deep-link text/URL for that package. When adding a new capacity option, add a `.pill` button with the right `data-price`/`data-label` in the matching `.pill-row`; when adding a new package tier, mirror one of these existing IIFEs rather than inventing a new pattern.
-- **WhatsApp is the sole contact/CTA channel**: every call-to-action link points to `https://wa.me/529991558206` with a pre-filled, URL-encoded message (`?text=...`). New CTAs should follow this same `wa.me` deep-link pattern with an appropriately encoded message.
-- **SEO/social metadata**: `<head>` contains Open Graph, Twitter Card, and JSON-LD (`LocalBusiness`) structured data. If prices, phone number, address, or service description change in the visible content, update the corresponding values in the JSON-LD block and meta tags too, so they stay in sync.
+- **Arquitectura de archivo único**: todo el CSS vive en el bloque `<style>` del `<head>`; todo el JS vive en un bloque `<script>` al final del `<body>`. Mantén los nuevos estilos/scripts inline en `index.html` en lugar de separarlos en archivos distintos, siguiendo la estructura actual.
+- **El idioma del sitio es español** (`<html lang="es">`) y está dirigido a una audiencia mexicana (locale `es_MX`, moneda MXN). Mantén todo el copy de cara al usuario en español salvo indicación contraria.
+- **Layout basado en secciones**: la página es una secuencia de bloques `<section>` con `id`s descriptivos (`beneficios`, `paquetes`, `ubicacion`, `garantia`, `faq`, `contacto`) usados tanto para los enlaces de navegación/anclas como límites naturales de edición — la mayoría de los cambios de contenido apuntan a una sola sección.
+- **Variables CSS**: colores, espaciados y radios están centralizados en propiedades personalizadas `:root` (`--bg`, `--cyan`, `--green-wa`, `--text`, etc. al inicio del bloque `<style>`). Reutiliza estas variables en vez de hardcodear nuevos colores.
+- **Selectores de precio/paquete**: las tarjetas de paquete "Con Disco Interno" e "Interno + Externo" tienen píldoras de capacidad interactivas (botones `.pill` con atributos `data-price`/`data-label`) conectadas mediante dos IIFEs casi idénticas al final del script. Cada IIFE actualiza el precio mostrado (vía `fmt()`), la nota descriptiva y el texto/URL del deep-link de WhatsApp para ese paquete. Al agregar una nueva opción de capacidad, añade un botón `.pill` con el `data-price`/`data-label` correcto en el `.pill-row` correspondiente; al agregar un nuevo nivel de paquete, replica una de estas IIFEs existentes en lugar de inventar un patrón nuevo.
+- **WhatsApp es el único canal de contacto/CTA**: cada enlace de llamada a la acción apunta a `https://wa.me/529991558206` con un mensaje pre-rellenado y codificado en URL (`?text=...`). Los nuevos CTAs deben seguir este mismo patrón de deep-link `wa.me` con un mensaje debidamente codificado.
+- **Metadatos SEO/redes sociales**: el `<head>` contiene Open Graph, Twitter Card y datos estructurados JSON-LD (`LocalBusiness`). Si los precios, el teléfono, la dirección o la descripción del servicio cambian en el contenido visible, actualiza también los valores correspondientes en el bloque JSON-LD y en las meta tags para que se mantengan sincronizados.
